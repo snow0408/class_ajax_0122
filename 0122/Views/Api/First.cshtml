@@ -1,0 +1,34 @@
+﻿@{
+	ViewData["Title"] = "First";
+}
+
+<h1>First</h1>
+<button id="btn1" class="btn btn-primary">Ajax</button>
+<div id="div1" class="alert alert-info"></div>
+
+
+@section Scripts{
+	<script>
+		const btn = document.querySelector('#btn1');
+		const theDiv = document.querySelector('#div1');
+		btn.addEventListener('click', () => {
+			//Ajax
+			//console.log(fetch('/api/Content'))
+			//promise resolve() reject
+			//fetch('/api/Content')
+			fetch('@Url.Content("~/api/content")') 
+				//'~'指向專案根目錄, 但javascript不支援, 須加上@Url.Content()使用
+				//     .then(response => { //收到response物件
+				//         // console.log(response);
+				//         // console.log(response.text()); //promise
+				//         return response.text();
+				//     })
+				.then(response => response.text())
+				.then(data => { //得到response物件中的data
+					//console.log(data);
+					theDiv.innerHTML = `${data}`;
+				})
+		})
+		
+	</script>
+}

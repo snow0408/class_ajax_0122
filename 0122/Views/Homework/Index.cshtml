@@ -19,7 +19,7 @@
 
 		const htmlSpots = data.map((data) => {
 			const { stitle, xbody, address, file, MEMO_TIME, info } = data;
-			const imgUrl = file && file.img && file.img[0] ? file.img[0].text : '';
+			const imgUrl = file.img[0] ? file.img[0].text : '';
 			return (
 				`<div class="card mb-5 mx-3 flex-item" style="width: 500px;">
 										  <img src="${imgUrl}" class="card-img-top" alt="...">

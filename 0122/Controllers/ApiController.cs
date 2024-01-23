@@ -30,6 +30,7 @@ namespace _0122.Controllers
 
 		public IActionResult Content()
 		{
+			System.Threading.Thread.Sleep(1000); //停1000毫秒
 			//return Content("Hello Content");
 			//return Content("<h2>Hello Content</h2>", "text/html");
 			return Content("<h2>Hello Content, 早安安安安安</h2>", "text/plain", System.Text.Encoding.UTF8);

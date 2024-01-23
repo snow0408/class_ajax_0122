@@ -1,0 +1,41 @@
+﻿@{
+	ViewData["Title"] = "Index";
+}
+
+<div id="card" class="container d-flex flex-wrap justify-content-between"></div>
+
+@section Scripts{
+	<script src="~/js/travel.js"></script>
+	<script>
+		console.log(spots.CommonFormat.Section[0]);
+		//console.log(spots.CommonFormat.Section);
+
+		const data = spots.CommonFormat.Section;
+		console.log(data);
+
+		console.log(data[0].file.img[0].text)
+
+		const theUl = document.querySelector('#card');
+
+		const htmlSpots = data.map((data) => {
+			const { stitle, xbody, address, file, MEMO_TIME, info } = data;
+			const imgUrl = file && file.img && file.img[0] ? file.img[0].text : '';
+			return (
+				`<div class="card mb-5 mx-3 flex-item" style="width: 500px;">
+										  <img src="${imgUrl}" class="card-img-top" alt="...">
+				  <div class="card-body">
+					<h5 class="card-title">${stitle}</h5>
+					<p class="card-text">${xbody}</p>
+				  </div>
+				  <ul class="list-group list-group-flush">
+				    <li class="list-group-item">地址：${address}</li>
+					<li class="list-group-item">${info}</li>
+					<li class="list-group-item">開放時間：${MEMO_TIME}</li>
+				  </ul>
+				</div>`
+			)
+		})
+
+		theUl.innerHTML = htmlSpots.join("");
+	</script>
+}

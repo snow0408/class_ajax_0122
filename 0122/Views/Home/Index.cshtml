@@ -1,0 +1,174 @@
+﻿@{
+	ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+	<h1 class="display-4">Welcome</h1>
+	<p>作業連結在主選單，謝謝老師~</p>
+</div>
+<ul>
+	<li>A, 2, 20000</li>
+	<li>A, 2, 20000</li>
+	<li>A, 2, 20000</li>
+</ul>
+
+<ul id="ul1"></ul>
+
+@section Scripts{
+	<script>
+		const emps = [{ "name": "Allen", "workYears": 3, "salary": 35000 },
+		{ "name": "Bllen", "workYears": 4, "salary": 45000 },
+		{ "name": "Cllen", "workYears": 2, "salary": 25000 }];
+		console.log(emps);
+
+		const theUl = document.querySelector('#ul1');
+
+		const htmlEmps = emps.map((emp) => {
+			const { name, workYears, salary } = emp;
+			return (
+				`<li>${name}, ${workYears}, ${salary}</li>`
+			)
+		})
+
+		theUl.innerHTML = htmlEmps.join("");
+		
+			//JSON資料的讀取
+			// for (let i = 0, max = emps.length; i < max; i++) {
+			//     console.log(emps[i].name);
+			//     console.log(emps[i].workYears);
+			//     console.log(emps[i].salary);
+			// }
+
+			//Array.方法()
+			// const docFrag = document.createDocumentFragment();
+			// emps.forEach((emp) => {
+			//     // console.log(emp.name);
+			//     // console.log(emp.workYears);
+			//     // console.log(emp.salary);
+			//     //emp.name + "," + emp.workYears + "," + emp.salary
+			//     const eleLi = document.createElement("li"); //<li>
+			//     const txtLi = document.createTextNode(`${emp.name},${emp.workYears},${emp.salary}`); //Tom,3,35000
+			//     eleLi.appendChild(txtLi); //<li>Tom,3,35000</li>
+			//     //先加到空的容器中
+			//     docFrag.appendChild(eleLi); //<ul><li>Tom,3,35000</li></ul>
+
+			// })
+			// theUl.appendChild(docFrag); //這時候才將資料顯示到網頁上
+
+
+
+			// console.log(emps[1]); //{ "name": "Tom", "workYears": 3, "salary": 35000 }
+			// console.log(emps[1].workYears);  //Tom
+
+
+
+			//[] or {}
+			// const datas = ["a", "b", "c"];
+			// console.log(datas[0]);  //a
+			// console.log(datas[1]);  //b
+			// console.log(datas[2]);  //c
+
+			// const user = { "name": "Tom", "age": 30 };
+			// console.log(user.name); //Tom
+			// console.log(user.age); //30
+
+
+		//------------------------------------------------------------------------------------------
+
+		// setTimeout(function () {
+		//     console.log('A');
+		// }, 3000);
+		// setTimeout(function () {
+		//     console.log('B');
+		// }, 2000);
+		// setTimeout(function () {
+		//     console.log('C');
+		// }, 1000);
+
+		//---------------------------------------------------------------------------------------------
+
+		// //建立Promise物件
+		// const promise = new Promise((resolve, reject) => {  //resolve執行成功的參數, reject執行失敗的參數
+		//     //非同步程式碼
+		//     const num = Math.random() > 0.5 ? 1 : 0;
+
+		//     if (num) { resolve("成功"); }
+		//     else { reject("失敗"); }
+		// });
+
+		// //使用promise
+		// promise
+		//     .then((data) => { //得到resolve的結果
+		//         console.log(data);
+		//     })
+		//     .catch((err) => { //得到reject的結果
+		//         console.log(err);
+		//     })
+		//     .finally(() => {
+		//         console.log("END");
+		//     })
+
+		//----------------------------------------------------------------------------------------------
+
+		// //建立Promise物件
+		// function show(data) {
+		// 	const promise = new Promise((resolve, reject) => {
+		// 		setTimeout(() => {
+		// 			resolve(data)
+		// 		}, 1000);
+		// 	})
+		// 	return promise;
+		// }
+
+		// //使用promise
+		// show("A")
+		// 	.then((data) => {
+		// 		console.log(data)
+		// 		return show("B")
+		// 	})
+		// 	.then((data) => {
+		// 		console.log(data)
+		// 		return show("C")
+		// 	})
+		// 	.then((data) => {
+		// 		console.log(data)
+		// 	});
+
+
+		// 不使用promise的寫法--Callback Hell 多層會難判讀
+		// setTimeout(function () {
+		//     console.log('A');
+		//     setTimeout(function () {
+		//         console.log('B');
+		//         setTimeout(function () {
+		//             console.log('C');
+		//         }, 1000);
+		//     }, 1000);
+		// }, 1000);
+
+		//----------------------------------------------------------------------------------------
+
+		//最新的寫法
+
+		//建立Promise
+		function show(data) {
+			const promise = new Promise((resolve, reject) => {
+				setTimeout(() => { resolve(data) }, 1000)
+			});
+			return promise;
+		}
+
+		//async await=> 用同步的程式語法結構來完成非同步效果
+		//IIFE
+		(async () => { 
+			let data=await show("A");
+			console.log(data);
+			data = await show("B");
+			console.log(data);
+			data = await show("C");
+			console.log(data);
+		})()
+		
+
+	</script>
+}

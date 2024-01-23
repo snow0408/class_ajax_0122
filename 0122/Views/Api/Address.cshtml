@@ -1,0 +1,23 @@
+﻿@{
+	ViewData["Title"] = "Address";
+}
+
+<h1>Address</h1>
+
+<select id="selCity">
+	<option value="">縣市</option>
+</select>
+
+@section Scripts{
+	<script>
+		const selCity = document.querySelector('#selCity');
+
+		(async () => {
+			const response = await fetch('@Url.Content("~/api/cities")');
+			const cities = await response.json();
+
+			const optCities = cities.map(city => `<option value="${city}">${city}</option>`);
+			selCity.innerHTML = optCities.join("");
+		})()
+	</script>
+}

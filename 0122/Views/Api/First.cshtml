@@ -5,7 +5,7 @@
 <h1>First</h1>
 <button id="btn1" class="btn btn-primary">Ajax</button>
 <img src="~/images//Hourglass.gif" id="imgLoading" style="display:none" />
-
+<button id="btn2" class="btn btn-danger">停止</button>
 <div id="div1" class="alert alert-info"></div>
 
 
@@ -14,13 +14,32 @@
 		const btn = document.querySelector('#btn1');
 		const theDiv = document.querySelector('#div1');
 		const imgLoader=document.querySelector('#imgLoading')
+		const btnStop = document.querySelector('#btn2');
+
+		let abortController;
+
+		btnStop.addEventListener('click', async () => {
+			if (abortController) { 
+				abortController.abort();
+			}
+		})
 
 		btn.addEventListener('click', async () => {
 			try {
 				imgLoader.style.display = "inline"; //顯示執行中圖式
 				btn.setAttribute("disabled", "disabled"); //停用按鈕 (屬性名稱, 屬性值)
+
+				//建立AbortController
+				abortController = new AbortController();
+				const signal = abortController.signal;
+
+				//5秒未回傳資料自動停止
+				setTimeout(() => { 
+					abortController.abort();
+				},5000)
+
 				//Ajax
-				const response = await fetch('@Url.Content("~/api/content")')
+				const response = await fetch('@Url.Content("~/api/content")', {signal})
 				if (!response.ok) { //not false
 					throw new Error(`${response.status}`);
 				}

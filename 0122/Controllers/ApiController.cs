@@ -22,20 +22,40 @@ namespace _0122.Controllers
 			return View();
 		}
 
+		public IActionResult Register(string name, int age=20)
+		{
+			if (string.IsNullOrEmpty(name)) 
+			{
+				name = "Guest";
+			}
+			return Content($"Hello {name}, you are {age} years old.");
+		}
+
 		public IActionResult Cities()
 		{
 			var cities = _dbContext.Addresses.Select(a => a.City).Distinct();
 			return Json(cities);
 		}
 
-		public IActionResult Content()
+        public IActionResult Districts(string city)
+        {
+            var districts = _dbContext.Addresses.Where(a => a.City == city).Select(a => a.SiteId).Distinct();
+            return Json(districts);
+        }
+
+        public IActionResult Content()
 		{
-			System.Threading.Thread.Sleep(1000); //停1000毫秒
+			System.Threading.Thread.Sleep(2000); //停2000毫秒
 			//return Content("Hello Content");
 			//return Content("<h2>Hello Content</h2>", "text/html");
 			return Content("<h2>Hello Content, 早安安安安安</h2>", "text/plain", System.Text.Encoding.UTF8);
 
 			// text/plain 純文字
+		}
+
+		public IActionResult Address() 
+		{
+			return View();
 		}
 
 		public IActionResult Avatar(int id = 1)

@@ -1,6 +1,7 @@
 ﻿using _0122.Models;
 using _0122.Models.DTO;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing.Constraints;
 using Microsoft.EntityFrameworkCore;
 
 namespace _0122.Controllers
@@ -8,9 +9,12 @@ namespace _0122.Controllers
 	public class ApiController : Controller
 	{
 		private readonly MyDbContext _dbContext;
-		public ApiController(MyDbContext dbContext)
+		private readonly IWebHostEnvironment _host;
+
+		public ApiController(MyDbContext dbContext, IWebHostEnvironment hostingEnvironment)
 		{
 			_dbContext = dbContext;
+			_host= hostingEnvironment;
 		}
 
 		public IActionResult Index()
@@ -23,15 +27,44 @@ namespace _0122.Controllers
 			return View();
 		}
 
-		public IActionResult Register(UsersDTO _user)
+		public IActionResult Register(Member member, IFormFile Avatar)
 		{
-			if (string.IsNullOrEmpty(_user.Name)) 
-			{
-				_user.Name = "Guest";
-			}
+			//if (string.IsNullOrEmpty(_user.Name)) 
+			//{
+			//	_user.Name = "Guest";
+			//}
 			//return Content($"Hello {_user.Name}, you are {_user.Age} years old. 您電子郵件是 {_user.Email}");
-			return Content($"{_user.Avatar?.FileName}-{_user.Avatar?.Length}-{_user.Avatar?.ContentType}");
 
+			//return Content($"{_user.Avatar?.FileName}-{_user.Avatar?.Length}-{_user.Avatar?.ContentType}");
+			string fileName="empty.jpg";
+			if (Avatar != null) 
+			{ 
+				fileName=Avatar.FileName;
+			}
+			//取得檔案上傳的實際路徑
+			string uploadPath=Path.Combine(_host.WebRootPath, "uploads", fileName);
+			//檔案上傳
+			using (var fileStream = new FileStream(uploadPath, FileMode.Create))
+			{
+				Avatar?.CopyTo(fileStream);
+			}
+
+			//轉成二進制
+			byte[]? imgByte =null;
+			using (var memoryStream=new MemoryStream()) 
+			{
+				Avatar?.CopyTo(memoryStream);
+				imgByte = memoryStream.ToArray();
+			}
+
+			member.FileName = fileName;
+			member.FileData = imgByte;
+
+			//新增
+			_dbContext.Members.Add(member);
+			_dbContext.SaveChanges();
+
+			return Content("新增成功");
 		}
 
 		public IActionResult Cities()

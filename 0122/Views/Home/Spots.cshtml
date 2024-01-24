@@ -1,0 +1,36 @@
+﻿@{
+	ViewData["Title"] = "Spots";
+}
+
+<h1>Spots</h1>
+
+@section Scripts{
+	<script>
+		//searchData條件
+		const searchData = {
+			"categoryId": 0,
+			"keyword":"北投",
+			"page":2,
+			"pagesize":12,
+			"sortType":"asc",
+			"sortBy":""
+		};
+
+		//根據searchData條件讀取景點資料
+		const loadSpots = async () => {
+			const response = await fetch('@Url.Content("~/api/spots")', {
+				method: 'POST',
+				body: JSON.stringify(searchData),
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			});
+			const datas = await response.json();
+			console.log(datas);
+		}
+
+		//載入
+		loadSpots();
+
+	</script>
+}

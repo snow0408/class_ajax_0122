@@ -3,7 +3,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace _0122.Models
+namespace _0122.Models.EFModels
 {
     public partial class Spot
     {

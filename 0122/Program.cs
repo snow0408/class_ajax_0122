@@ -1,4 +1,5 @@
 using _0122.Models;
+using _0122.Models.EFModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace _0122

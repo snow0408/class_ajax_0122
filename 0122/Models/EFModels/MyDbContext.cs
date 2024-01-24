@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace _0122.Models
+namespace _0122.Models.EFModels
 {
     public partial class MyDbContext : DbContext
     {
@@ -23,6 +23,7 @@ namespace _0122.Models
         public virtual DbSet<Member> Members { get; set; }
         public virtual DbSet<Spot> Spots { get; set; }
         public virtual DbSet<SpotImage> SpotImages { get; set; }
+        public virtual DbSet<SpotImagesSpot> SpotImagesSpots { get; set; }
 
 //        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 //        {
@@ -92,6 +93,23 @@ namespace _0122.Models
             modelBuilder.Entity<SpotImage>(entity =>
             {
                 entity.HasKey(e => e.ImageId);
+            });
+
+            modelBuilder.Entity<SpotImagesSpot>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("SpotImagesSpot");
+
+                entity.Property(e => e.Address).HasMaxLength(200);
+
+                entity.Property(e => e.DateCreated).HasColumnType("datetime");
+
+                entity.Property(e => e.Latitude).HasMaxLength(20);
+
+                entity.Property(e => e.Longitude).HasMaxLength(20);
+
+                entity.Property(e => e.SpotTitle).HasMaxLength(50);
             });
 
             OnModelCreatingPartial(modelBuilder);

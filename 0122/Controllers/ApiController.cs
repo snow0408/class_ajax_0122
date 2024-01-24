@@ -1,4 +1,5 @@
 ﻿using _0122.Models;
+using _0122.Models.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,13 +23,13 @@ namespace _0122.Controllers
 			return View();
 		}
 
-		public IActionResult Register(string name, int age=20)
+		public IActionResult Register(UsersDTO _user)
 		{
-			if (string.IsNullOrEmpty(name)) 
+			if (string.IsNullOrEmpty(_user.Name)) 
 			{
-				name = "Guest";
+				_user.Name = "Guest";
 			}
-			return Content($"Hello {name}, you are {age} years old.");
+			return Content($"Hello {_user.Name}, you are {_user.Age} years old. 您電子郵件是 {_user.Email}");
 		}
 
 		public IActionResult Cities()

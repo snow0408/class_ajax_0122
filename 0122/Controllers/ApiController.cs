@@ -29,7 +29,9 @@ namespace _0122.Controllers
 			{
 				_user.Name = "Guest";
 			}
-			return Content($"Hello {_user.Name}, you are {_user.Age} years old. 您電子郵件是 {_user.Email}");
+			//return Content($"Hello {_user.Name}, you are {_user.Age} years old. 您電子郵件是 {_user.Email}");
+			return Content($"{_user.Avatar?.FileName}-{_user.Avatar?.Length}-{_user.Avatar?.ContentType}");
+
 		}
 
 		public IActionResult Cities()

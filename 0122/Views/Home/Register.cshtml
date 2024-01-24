@@ -1,63 +1,81 @@
-﻿
-@{
-    ViewData["Title"] = "Register";
+﻿@{
+	ViewData["Title"] = "Register";
 }
 
 <h1>Register</h1>
 
 <div class="row">
-    <div class="col-3"></div>
-    <div class="col-6">
-        <form id="userForm">
-            <div class="mb-3">
-                <label for="userName" class="form-label">姓名：</label>
-                <input type="text" class="form-control" id="userName" name="Name">
-            </div>
-            <div class="mb-3">
-                <label for="UserEmail" class="form-label">電子郵件：</label>
-                <input type="email" class="form-control" id="UserEmail" name="Email">
-            </div>
-            <div class="mb-3">
-                <label for="userAge" class="form-label">年紀：</label>
-                <input type="number" class="form-control" id="userAge" name="Age">
-            </div>
+	<div class="col-3"></div>
+	<div class="col-6">
+		<form id="userForm">
+			<div class="mb-3">
+				<label for="userName" class="form-label">姓名：</label>
+				<input type="text" class="form-control" id="userName" name="Name">
+			</div>
+			<div class="mb-3">
+				<label for="UserEmail" class="form-label">電子郵件：</label>
+				<input type="email" class="form-control" id="UserEmail" name="Email">
+			</div>
+			<div class="mb-3">
+				<label for="userAge" class="form-label">年紀：</label>
+				<input type="number" class="form-control" id="userAge" name="Age">
+			</div>
+			<div class="mb-3">
+				<label for="userAvatar" class="custom-file-lable">頭像：</label>
+				<input type="file" class="custom-file-input" id="userAvatar" name="Avatar">
+			</div>
 
-            <button id="button1" type="submit" class="btn btn-primary">送出</button>
-        </form>
-        <div class="alert alert-info" id="div1"></div>
-    </div>
-    <div class="col-3">
-    </div>
+			<button id="button1" type="submit" class="btn btn-primary">送出</button>
+		</form>
+		<div class="alert alert-info" id="div1"></div>
+	</div>
+	<div class="col-3">
+	</div>
 </div>
 
 
 @section Scripts{
-    <script>
+	<script>
 
-        const btn = document.querySelector('#button1');
-        const txtName = document.querySelector('#userName');
-        const txtAge = document.querySelector('#userAge');
-        const txtMail = document.querySelector('#UserEmail');
-        const theDiv = document.querySelector('#div1');
+		const btn = document.querySelector('#button1');
+		// const txtName = document.querySelector('#userName');
+		// const txtAge = document.querySelector('#userAge');
+		// const txtMail = document.querySelector('#UserEmail');
+		const theDiv = document.querySelector('#div1');
+		const theForm = document.querySelector('#userForm')
 
-        btn.addEventListener('click', async (event) => {
-            event.preventDefault(); //防止預設行為的發生
+		btn.addEventListener('click', async (event) => {
+			event.preventDefault(); //防止預設行為的發生
 
-            let url = '@Url.Content("~/api/register")';
-            url = `${url}?Name=${txtName.value}&Age=${txtAge.value}&Email=${txtMail.value}`;
-            const response = await fetch(url)
-            const data = await response.text()
-            theDiv.innerHTML = data;
-        })
+			//透過formdata物件讀取資料
+			const formData = new FormData(theForm);
+			
+
+			//將formdata資料傳到server端
+			const url = '@Url.Content("~/api/register")';
+			const response = await fetch(url, {
+				method: 'POST',
+				body: formData
+			});
+			const datas = await response.text();
+			theDiv.innerHTML = datas;
 
 
-        // (async () => {
-        //     const url = '@Url.Content("~/api/register")?name=Tom&age=30&email=Tom30@gmail.com';
-        //     //const url = '@Url.Content("~/api/register")';
-        //     const response = await fetch(url);
-        //     const datas = await response.text();
-        //     console.log(datas);
+			// let url = '@Url.Content("~/api/register")';
+			// url = `${url}?Name=${txtName.value}&Age=${txtAge.value}&Email=${txtMail.value}`;
+			// const response = await fetch(url)
+			// const data = await response.text()
+			// theDiv.innerHTML = data;
+		})
 
-        // })();
-    </script>
+		//---------------------------------------------------------------------------------------
+
+		// (async () => {
+		//     const url = '@Url.Content("~/api/register")?name=Tom&age=30&email=Tom30@gmail.com';
+		//     //const url = '@Url.Content("~/api/register")';
+		//     const response = await fetch(url);
+		//     const datas = await response.text();
+		//     console.log(datas);
+		// })();
+	</script>
 }

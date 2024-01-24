@@ -126,7 +126,7 @@ namespace _0122.Controllers
 					spots = _search.sortType == "asc" ? spots.OrderBy(s => s.SpotTitle) : spots.OrderByDescending(s => s.SpotTitle);
 					break;
 				case "categoryId":
-					spots=_search.sortType=="asc"?spots.OrderBy(s => s.CategoryId) : spots.OrderByDescending(s=> s.CategoryId);
+					spots = _search.sortType == "asc" ? spots.OrderBy(s => s.CategoryId) : spots.OrderByDescending(s => s.CategoryId);
 					break;
 				default:
 					spots = _search.sortType == "asc" ? spots.OrderBy(s => s.SpotId) : spots.OrderByDescending(s => s.SpotId);
@@ -138,11 +138,15 @@ namespace _0122.Controllers
 			int pageSize = _search.pageSize ?? 9; //設定每頁顯示多少筆資料 ??預設9
 			int page = _search.page ?? 1; //目前要顯示第幾頁 ??預設1
 			int TotalPages = (int)Math.Ceiling((decimal)TotalCount / pageSize); //計算總共有幾頁
-
+			//取出分頁資料, 跳過((頁數-1)*單頁資料數)取(單頁資料數)
 			spots = spots.Skip((int)((page - 1) * pageSize)).Take(pageSize);
-			//跳過((頁數-1)*單頁資料數)取(單頁資料數)
 
-			return Json(spots);
+			//設計回傳的格式
+			SpotsPagingDTO spotsPaging = new SpotsPagingDTO();
+			spotsPaging.TotalPages = TotalPages;
+			spotsPaging.SpotsResult = spots.ToList();
+
+			return Json(spotsPaging);
 		}
 	}
 }

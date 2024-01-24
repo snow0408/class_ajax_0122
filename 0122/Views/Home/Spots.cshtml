@@ -3,6 +3,14 @@
 }
 
 <h1>Spots</h1>
+<div class="row mb-3">
+	<div class="col-3"></div>
+	<div class="col-6"></div>
+	<div class="col-3">
+		<input type="search" id="inputKeyword" class="form-control" placeholder="景點搜尋" />
+	</div>
+</div>
+<div id="spots" class="row row-col-1 row-cols-md-3 g-4"></div>
 
 @section Scripts{
 	<script>
@@ -16,6 +24,9 @@
 			"sortBy":""
 		};
 
+		const divSpots = document.querySelector('#spots');
+		const inpKeyword = document.querySelector('#inputKeyword');
+
 		//根據searchData條件讀取景點資料
 		const loadSpots = async () => {
 			const response = await fetch('@Url.Content("~/api/spots")', {
@@ -26,8 +37,36 @@
 				}
 			});
 			const datas = await response.json();
-			console.log(datas);
+			const cardSpots = datas.spotsResult.map(spot => {
+				const { spotId, spotTitle, spotDescription, address, openTime, spotImage } = spot;
+				const description = spotDescription <= 100 ? spotDescription : spotDescription.substring(0, 100) + "...";
+				return (
+					`<div class="card mb-5" >
+								<img src="${spotImage}" class="card-img-top" alt="${spotTitle}">
+								  <div class="card-body">
+									<h5 class="card-title">${spotId}-${spotTitle}</h5>
+									<p class="card-text">${description}</p>
+								  </div>
+								  <ul class="list-group list-group-flush">
+									<li class="list-group-item">地址：${address}</li>
+									<li class="list-group-item">開放時間：${openTime}</li>
+								  </ul>
+								</div>`
+				)
+			});
+
+			//console.log(datas);
+			//console.log(cardSpots);
+			divSpots.innerHTML = cardSpots.join("");
 		}
+
+		inpKeyword.addEventListener('keydown', event => {
+			if (event.which === 13) { 
+				searchData.keyword = event.target.value;
+				searchData.page = 1;
+				loadSpots();
+			}
+		})
 
 		//載入
 		loadSpots();

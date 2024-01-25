@@ -148,5 +148,12 @@ namespace _0122.Controllers
 
 			return Json(spotsPaging);
 		}
+
+		public IActionResult SpotsTitle(string keyword) 
+		{
+			var titles=_dbContext.Spots.Where(s => s.SpotTitle.Contains(keyword))
+			   .Select(s => s.SpotTitle).Take(8);
+			return Json(titles);
+		}
 	}
 }
